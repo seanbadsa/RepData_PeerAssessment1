@@ -1,12 +1,8 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 ## Set the environment and download the file for this project
 ## Loading and preprocessing the data
-```{r}
+
+```r
 library(knitr)
 library(ggplot2)
 library(lattice)
@@ -36,19 +32,38 @@ if (!file.exists(destfile)) {
 }
 ```
 
+```
+## Warning in dir.create(src): '\\NJROS1NS03V1\X067867$\My Documents\DataPA1'
+## already exists
+```
+
+```
+## ### downloading the file please wait..... ##
+```
+
 ## What is mean total number of steps taken per day?
 1. Calculate the total number of steps taken per day
 2. Make a histogram of the total number of steps taken each day
 3. Calculate and report the mean and median of the total number of steps taken per day
 
-```{r}
+
+```r
 total_steps <- tapply(act_data$steps, act_data$date, FUN=sum, na.rm=TRUE)
 ##cat("Total steps per day",as.act_data.frame(total_steps),"\n")
 # just x supplied = histogram
 qplot(total_steps, binwidth=1000, xlab="Total number of steps taken each day", ylab="# of times in a day(Frequency)",main="Histogram of number of steps")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
+
+```r
 mean_steps <- mean(total_steps, na.rm=TRUE)
 med_steps <- median(total_steps, na.rm=TRUE)
 cat("Mean steps per day",mean_steps, ", & Medean steps per day",med_steps," \n")
+```
+
+```
+## Mean steps per day 9354.23 , & Medean steps per day 10395
 ```
 
 ## What is the average daily activity pattern?
@@ -57,16 +72,25 @@ cat("Mean steps per day",mean_steps, ", & Medean steps per day",med_steps," \n")
    across all days (y-axis)
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
-```{r}
+
+```r
 avr_steps <- aggregate(x=list(steps=act_data$steps), by=list(interval=act_data$interval),FUN=mean, na.rm=TRUE)
 ggplot(data=avr_steps, aes(x=interval, y=steps)) +
     geom_line() +
     xlab("Interval(5 mins)") +
     ylab("On average number of steps taken")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+
+```r
 ##Which 5-minute interval, on average across all the days in the dataset contains the maximum number of steps?
 Max_stps <- avr_steps$interval[which.max(avr_steps$steps)]
 cat("on average across all the days in the dataset, contains the maximum number of step is  ",Max_stps)
+```
 
+```
+## on average across all the days in the dataset, contains the maximum number of step is   835
 ```
 
 
@@ -79,10 +103,18 @@ cat("on average across all the days in the dataset, contains the maximum number 
 
 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
-```{r}
+
+```r
 ##missing_stps <- is.na(act_data$steps)
 # How many missing
 sum(is.na(act_data))
+```
+
+```
+## [1] 2304
+```
+
+```r
 ##table(missing_stps)
 
 replace.value <- function(steps, interval) {
@@ -96,13 +128,29 @@ replace.value <- function(steps, interval) {
 new_ds <- act_data
 new_ds$steps <- mapply(replace.value, new_ds$steps, new_ds$interval)
 cat("Missing data in new data set is ",sum(is.na(new_ds)))
+```
+
+```
+## Missing data in new data set is  0
+```
+
+```r
 total_steps.new <- tapply(new_ds$steps, new_ds$date, FUN=sum)
 ##cat("Total steps per day",as.act_data.frame(total_steps),"\n")
 # just x supplied = histogram
 qplot(total_steps.new, binwidth=1500, xlab="Total number of steps taken each day", ylab="# of times in a day(Frequency)",main="Histogram of number of steps(new dataset)")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
+
+```r
 mean_steps <- mean(total_steps.new)
 med_steps <- median(total_steps.new)
 cat("New Data Set: Mean steps per day",mean_steps, ", & Medean steps per day",med_steps," \n")
+```
+
+```
+## New Data Set: Mean steps per day 10766.19 , & Medean steps per day 10766.19
 ```
 
 
@@ -114,7 +162,8 @@ cat("New Data Set: Mean steps per day",mean_steps, ", & Medean steps per day",me
 
 2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
 
-```{r}
+
+```r
 dayType <- function(date) {
     day <- weekdays(date)
     if (day %in% c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday"))
@@ -131,9 +180,9 @@ new_ds$dayType <- as.factor(sapply(new_ds$date, FUN=dayType))
 
 avg <- aggregate(steps ~ interval + dayType, data=new_ds, mean)
 xyplot(avg$steps ~ avg$interval | avg$dayType, avg, type = "l", layout = c(1, 2), xlab = "Interval", ylab = "Number of steps")
-
-
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
 
 
 ### End of assignment
