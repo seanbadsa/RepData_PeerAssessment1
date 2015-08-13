@@ -4,8 +4,8 @@ output:
   html_document:
     keep_md: true
 ---
-## Set the environment and download the file for this project
-## Loading and preprocessing the data
+## Set the environment and download the file for this project from the provided url
+## Save the data in loacl folder and load for processing the data data
 ```{r}
 library(knitr)
 library(ggplot2)

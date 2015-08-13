@@ -1,6 +1,6 @@
 # Reproducible Research: Peer Assessment 1
-## Set the environment and download the file for this project
-## Loading and preprocessing the data
+## Set the environment and download the file for this project from the provided url
+## Save the data in loacl folder and load for processing the data data
 
 ```r
 library(knitr)
@@ -30,15 +30,6 @@ if (!file.exists(destfile)) {
     opts_chunk$set(echo = TRUE)
     act_data <- read.csv(destfile)
 }
-```
-
-```
-## Warning in dir.create(src): '\\NJROS1NS03V1\X067867$\My Documents\DataPA1'
-## already exists
-```
-
-```
-## ### downloading the file please wait..... ##
 ```
 
 ## What is mean total number of steps taken per day?
